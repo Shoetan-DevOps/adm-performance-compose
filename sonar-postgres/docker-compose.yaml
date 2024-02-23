@@ -16,6 +16,7 @@ services:
       - sonarqube_logs:/opt/sonarqube/logs
     ports:
       - "9000:9000"
+    restart: always
   sonar-db:
     image: postgres:14
     hostname: sonar-postgresql
@@ -27,6 +28,7 @@ services:
     volumes:
       - postgresql:/var/lib/postgresql
       - postgresql_data:/var/lib/postgresql/data
+    restart: always
 
 volumes:
   sonarqube_data:
