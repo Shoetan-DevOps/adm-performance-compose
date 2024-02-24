@@ -1,4 +1,4 @@
-
+#! /bin/bash
 
 #update pkgs 
 yum update

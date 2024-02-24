@@ -1,12 +1,13 @@
-version: "3.0"
+version: "3"
 services:     
   vault:
-    image: hashicorp/vault:latest
+    image: hashicorp/vault:1.16.0-rc2
     environment:
       VAULT_DEV_ROOT_TOKEN_ID: test
     ports:
       - 8200:8200
-    privileged: true
     restart: always
+    volumes:
+      - vault-data:/vault/data 
 volumes:
   vault-data:

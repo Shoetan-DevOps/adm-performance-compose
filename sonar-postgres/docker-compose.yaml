@@ -1,4 +1,4 @@
-version: "3.0"
+version: "3"
 services:
   sonarqube:
     image: sonarqube:9.9-community
@@ -29,33 +29,9 @@ services:
       - postgresql:/var/lib/postgresql
       - postgresql_data:/var/lib/postgresql/data
     restart: always
-
 volumes:
   sonarqube_data:
   sonarqube_extensions:
   sonarqube_logs:
   postgresql:
   postgresql_data:
-
-
- why is data persisting in container even though volume section is blank
-    sonar-db:
-    image: postgres:14
-    hostname: sonar-postgresql
-    container_name: sonar-postgresql
-    environment:
-      POSTGRES_USER: sonar
-      POSTGRES_PASSWORD: sonar
-      POSTGRES_DB: sonar
-    volumes:
-      - postgresql:/var/lib/postgresql
-      - postgresql_data:/var/lib/postgresql/data
-
-volumes:
-  sonarqube_data:
-  sonarqube_extensions:
-  sonarqube_logs:
-  postgresql:
-  postgresql_data:
-
-  

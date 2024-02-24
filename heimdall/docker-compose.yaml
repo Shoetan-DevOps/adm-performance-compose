@@ -1,0 +1,17 @@
+version: "3"
+services:
+  heimdall:
+    image: linuxserver/heimdall:2.6.1
+    container_name: heimdall
+    hostname: heimdall    
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/New_York
+    ports:
+      - 8099:80
+    restart: always
+    volumes:
+      - heimdall_data:/config
+volumes:
+  heimdall_data:
