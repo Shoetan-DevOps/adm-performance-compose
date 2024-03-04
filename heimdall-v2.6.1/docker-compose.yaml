@@ -1,4 +1,5 @@
 version: "3"
+
 services:
   heimdall:
     image: linuxserver/heimdall:2.6.1
@@ -13,5 +14,6 @@ services:
     restart: always
     volumes:
       - heimdall_data:/config
+
 volumes:
   heimdall_data:
