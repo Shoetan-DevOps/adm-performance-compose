@@ -29,3 +29,5 @@ chmod +x /usr/local/bin/docker-compose
 #verify Install
 echo "Verifying Installation: \n"
 docker-compose --version
+
+
