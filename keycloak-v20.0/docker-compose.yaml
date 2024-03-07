@@ -1,28 +1,28 @@
 version: "3"
 
 services:
-  postgresql:
-    image: bitnami/postgresql:13
+  keycloak-postgresql:
+    image: ${POSTGRES_IMAGE}
     environment:
-      - POSTGRESQL_USERNAME=bn_keycloak
-      - POSTGRESQL_PASSWORD=password
-      - POSTGRESQL_DATABASE=bitnami_keycloak
+      - POSTGRESQL_USERNAME=${POSTGRESQL_USERNAME}
+      - POSTGRESQL_PASSWORD=${POSTGRESQL_PASSWORD}
+      - POSTGRESQL_DATABASE=${POSTGRESQL_DATABASE}
       - POSTGRESQL_ENABLE_TLS=no
     volumes:
       - postgresql_data:/bitnami/postgresql
   keycloak:
-    image: bitnami/keycloak:20.0.0
+    image: ${KEYCLOAK_IMAGE}
     ports:
-      - "80:8080"
+      - ${KEYCLOAK_PORT}:8080
     environment:
       - KEYCLOAK_CREATE_ADMIN_USER=true
-      - KEYCLOAK_ADMIN=keycloak-admin
-      - KEYCLOAK_ADMIN_PASSWORD=password
+      - KEYCLOAK_ADMIN=${KEYCLOAK_ADMIN}
+      - KEYCLOAK_ADMIN_PASSWORD=${KEYCLOAK_ADMIN_PASSWORD}
       - KEYCLOAK_DATABASE_NAME=${POSTGRESQL_DATABASE}
       - KEYCLOAK_DATABASE_USER=${POSTGRESQL_USERNAME}
       - KEYCLOAK_DATABASE_PASSWORD=${POSTGRESQL_PASSWORD}
       - KEYCLOAK_DATABASE_PORT=5432
-      - KEYCLOAK_DATABASE_HOST=postgresql
+      - KEYCLOAK_DATABASE_HOST=keycloak-postgresql
       - KEYCLOAK_ENABLE_HEALTH_ENDPOINTS=true
       - KEYCLOAK_ENABLE_STATISTICS=true
     depends_on:
