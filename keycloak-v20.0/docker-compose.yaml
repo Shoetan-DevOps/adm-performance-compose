@@ -1,56 +1,26 @@
 version: "3"
 
 services:
-  keycloak:
-    image: ${KEYCLOAK_IMAGE}
+  postgresql:
+    image: bitnami/postgresql:13
     environment:
-      KEYCLOAK_DATABASE_VENDOR: ${KEYCLOAK_DATABASE_VENDOR}
-      KEYCLOAK_DATABASE_HOST: keycloak-db
-      KEYCLOAK_DATABASE_PORT: 5432
-      KEYCLOAK_DATABASE_NAME: ${POSTGRES_DB}
-      KEYCLOAK_DATABASE_USER: ${POSTGRES_USER}
-      KEYCLOAK_DATABASE_PASSWORD: ${POSTGRES_PASSWORD}
-      KEYCLOAK_DATABASE_SCHEMA: public
-      KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN_USER}
-      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
-      KEYCLOAK_ENABLE_HEALTH_ENDPOINTS: 'true'
-      KEYCLOAK_ENABLE_STATISTICS: 'true'
-      KC_HOSTNAME: ${KEYCLOAK_HOSTNAME}
-      KC_PROXY: edge
-      KC_PROXY_ADDRESS_FORWARDING: 'true'
-      KC_HTTP_ENABLED: 'true'
-    restart: always
-    depends_on:
-      keycloak-db:
-        condition: service_healthy
-    ports:
-      - ${KEYCLOAK_PORT}:8080
-    networks:
-      keycloak:
-      
-  keycloak-db:
-    image: ${POSTGRES_IMAGE}
+      - ALLOW_EMPTY_PASSWORD=yes
+      - POSTGRESQL_USERNAME=bn_keycloak
+      - POSTGRESQL_DATABASE=bitnami_keycloak
     volumes:
-      - postgresql:/var/lib/postgresql
-      - postgresql_data:/var/lib/postgresql/data
-    environment:
-      POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-    healthcheck:
-      test: [ "CMD", "pg_isready", "-q", "-d", "${POSTGRES_DB}", "-U", "${POSTGRES_USER}" ]
-      interval: 10s
-      timeout: 5s
-      retries: 3
-      start_period: 60s
-    restart: always
+      - postgresql_data:/bitnami/postgresql
+  keycloak:
+    image: bitnami/keycloak:20.0.0
     ports:
-      - "5432:5432"
+      - "80:8080"
+    environment:
+      - KEYCLOAK_CREATE_ADMIN_USER=true
+    depends_on:
+      - postgresql
     networks:
       keycloak:
 
 volumes:
-  postgresql:
   postgresql_data:
 
 networks:
