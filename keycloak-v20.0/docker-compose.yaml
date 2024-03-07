@@ -4,6 +4,7 @@ services:
   postgresql:
     image: bitnami/postgresql:13
     environment:
+      - ALLOW_EMPTY_PASSWORD=yes
       - POSTGRESQL_USERNAME=bn_keycloak
       - POSTGRESQL_PASSWORD=password
       - POSTGRESQL_DATABASE=bitnami_keycloak
