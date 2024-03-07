@@ -3,6 +3,7 @@ version: "3"
 services:
   keycloak:
     image: ${KEYCLOAK_IMAGE}
+    command: start
     environment:
       KEYCLOAK_DATABASE_VENDOR: ${KEYCLOAK_DATABASE_VENDOR}
       KEYCLOAK_DATABASE_HOST: keycloak-db
@@ -23,6 +24,9 @@ services:
     depends_on:
       keycloak-db:
         condition: service_healthy
+    networks:
+      keycloak:
+      
   keycloak-db:
     image: ${POSTGRES_IMAGE}
     volumes:
@@ -38,8 +42,13 @@ services:
       timeout: 5s
       retries: 3
       start_period: 60s
-    restart: always 
+    restart: always
+    networks:
+      keycloak:
 
 volumes:
   postgresql:
   postgresql_data:
+
+networks:
+  keycloak:
