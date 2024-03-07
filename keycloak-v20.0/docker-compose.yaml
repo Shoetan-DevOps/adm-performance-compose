@@ -3,7 +3,6 @@ version: "3"
 services:
   keycloak:
     image: ${KEYCLOAK_IMAGE}
-    command: start
     environment:
       KEYCLOAK_DATABASE_VENDOR: ${KEYCLOAK_DATABASE_VENDOR}
       KEYCLOAK_DATABASE_HOST: keycloak-db
