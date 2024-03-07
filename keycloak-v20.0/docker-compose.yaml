@@ -1,45 +1,40 @@
 version: "3"
 
 services:
+  keycloak-postgresql:
+    image: ${POSTGRES_IMAGE}
+    environment:
+      - POSTGRESQL_USERNAME=${POSTGRESQL_USERNAME}
+      - POSTGRESQL_PASSWORD=${POSTGRESQL_PASSWORD}
+      - POSTGRESQL_DATABASE=${POSTGRESQL_DATABASE}
+      - POSTGRESQL_ENABLE_TLS=no
+    volumes:
+      - postgresql_data:/bitnami/postgresql
+    restart: always 
+    healthcheck:	
+      test: [ "CMD", "pg_isready", "-q", "-d", "${POSTGRESQL_DATABASE}", "-U", "${POSTGRESQL_USERNAME}" ]	
+      interval: 10s	
+      timeout: 5s	
+      retries: 3	
+      start_period: 60s	
   keycloak:
     image: ${KEYCLOAK_IMAGE}
+    ports:
+      - ${KEYCLOAK_PORT}:8080
     environment:
-      KEYCLOAK_DATABASE_VENDOR: ${KEYCLOAK_DATABASE_VENDOR}
-      KEYCLOAK_DATABASE_HOST: keycloak-db
-      KEYCLOAK_DATABASE_PORT: 5432
-      KEYCLOAK_DATABASE_NAME: ${POSTGRES_DB}
-      KEYCLOAK_DATABASE_USER: ${POSTGRES_USER}
-      KEYCLOAK_DATABASE_PASSWORD: ${POSTGRES_PASSWORD}
-      KEYCLOAK_DATABASE_SCHEMA: public
-      KEYCLOAK_ADMIN_USER: ${KEYCLOAK_ADMIN_USER}
-      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD}
-      KEYCLOAK_ENABLE_HEALTH_ENDPOINTS: 'true'
-      KEYCLOAK_ENABLE_STATISTICS: 'true'
-      KC_HOSTNAME: ${KEYCLOAK_HOSTNAME}
-      KC_PROXY: edge
-      KC_PROXY_ADDRESS_FORWARDING: 'true'
-      KC_HTTP_ENABLED: 'true'
-    restart: always
+      - KEYCLOAK_CREATE_ADMIN_USER=true
+      - KEYCLOAK_ADMIN=${KEYCLOAK_ADMIN}
+      - KEYCLOAK_ADMIN_PASSWORD=${KEYCLOAK_ADMIN_PASSWORD}
+      - KEYCLOAK_DATABASE_NAME=${POSTGRESQL_DATABASE}
+      - KEYCLOAK_DATABASE_USER=${POSTGRESQL_USERNAME}
+      - KEYCLOAK_DATABASE_PASSWORD=${POSTGRESQL_PASSWORD}
+      - KEYCLOAK_DATABASE_PORT=5432
+      - KEYCLOAK_DATABASE_HOST=keycloak-postgresql
+      - KEYCLOAK_ENABLE_HEALTH_ENDPOINTS=true
+      - KEYCLOAK_ENABLE_STATISTICS=true
     depends_on:
-      keycloak-db:
+      keycloak-postgresql:
         condition: service_healthy
-  keycloak-db:
-    image: ${POSTGRES_IMAGE}
-    volumes:
-      - postgresql:/var/lib/postgresql
-      - postgresql_data:/var/lib/postgresql/data
-    environment:
-      POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-    healthcheck:
-      test: [ "CMD", "pg_isready", "-q", "-d", "${POSTGRES_DB}", "-U", "${POSTGRES_USER}" ]
-      interval: 10s
-      timeout: 5s
-      retries: 3
-      start_period: 60s
-    restart: always 
 
 volumes:
-  postgresql:
   postgresql_data:
