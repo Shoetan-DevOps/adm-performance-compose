@@ -10,13 +10,13 @@ services:
       - POSTGRESQL_ENABLE_TLS=no
     volumes:
       - postgresql_data:/bitnami/postgresql
+    restart: always 
     healthcheck:	
-      test: [ "CMD", "pg_isready", "-q", "-d", "${POSTGRES_DB}", "-U", "${POSTGRES_USER}" ]	
+      test: [ "CMD", "pg_isready", "-q", "-d", "${POSTGRESQL_DATABASE}", "-U", "${POSTGRESQL_USERNAME}" ]	
       interval: 10s	
       timeout: 5s	
       retries: 3	
       start_period: 60s	
-    restart: always 
   keycloak:
     image: ${KEYCLOAK_IMAGE}
     ports:
