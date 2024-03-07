@@ -17,11 +17,7 @@ services:
       - KEYCLOAK_CREATE_ADMIN_USER=true
     depends_on:
       - postgresql
-    networks:
-      keycloak:
+
 
 volumes:
   postgresql_data:
-
-networks:
-  keycloak:
