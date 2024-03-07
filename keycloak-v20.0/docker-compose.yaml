@@ -26,7 +26,7 @@ services:
       - KEYCLOAK_ENABLE_HEALTH_ENDPOINTS=true
       - KEYCLOAK_ENABLE_STATISTICS=true
     depends_on:
-      - postgresql
+      - keycloak-postgresql
 
 volumes:
   postgresql_data:
