@@ -4,7 +4,7 @@ services:
   proxy:
     image: ${NGINX_IMAGE}
     volumes:
-      - /path/to/your_nginx.conf:/opt/bitnami/nginx/conf/nginx.conf:ro
+      - ./nginx.conf:/opt/bitnami/nginx/conf/nginx.conf:ro
     ports:
       - ${NGINX_PORT}:80
       
