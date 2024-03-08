@@ -11,12 +11,6 @@ services:
     volumes:
       - postgresql_data:/bitnami/postgresql
     restart: always 
-    healthcheck:	
-      test: [ "CMD", "pg_isready", "-q", "-d", "${POSTGRESQL_DATABASE}", "-U", "${POSTGRESQL_USERNAME}" ]	
-      interval: 10s	
-      timeout: 5s	
-      retries: 3	
-      start_period: 60s	
   keycloak:
     image: ${KEYCLOAK_IMAGE}
     ports:
@@ -33,8 +27,7 @@ services:
       - KEYCLOAK_ENABLE_HEALTH_ENDPOINTS=true
       - KEYCLOAK_ENABLE_STATISTICS=true
     depends_on:
-      keycloak-postgresql:
-        condition: service_healthy
+      - keycloak-postgresql
 
 volumes:
   postgresql_data:
